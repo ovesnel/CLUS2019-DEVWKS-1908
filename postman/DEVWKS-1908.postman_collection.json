@@ -1,0 +1,828 @@
+{
+	"info": {
+		"_postman_id": "d4293b89-293b-4d56-83e1-fecfe4a2eceb",
+		"name": "DEVWKS-1908",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ACI",
+			"item": [
+				{
+					"name": "01. Login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"aaaUser\": {\n\t\t\"attributes\": {\n\t\t\t\"name\": \"{{aci_username}}\",\n\t\t\t\"pwd\": \"{{aci_password}}\"\n\t\t}\n\t}\n}"
+						},
+						"url": {
+							"raw": "https://{{aci_host}}/api/aaaLogin.json",
+							"protocol": "https",
+							"host": [
+								"{{aci_host}}"
+							],
+							"path": [
+								"api",
+								"aaaLogin.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "02. Fabric Health (5min)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{aci_host}}/api/node/mo/topology/HDfabricOverallHealth5min-0.json",
+							"protocol": "https",
+							"host": [
+								"{{aci_host}}"
+							],
+							"path": [
+								"api",
+								"node",
+								"mo",
+								"topology",
+								"HDfabricOverallHealth5min-0.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "03. List Tenants",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"fvTenant\": {\n\t\t\"attributes\": {\n\t\t\t\"dn\": \"uni/tn-{{aci_tenant_name}}\",\n\t\t\t\"name\": \"{{aci_tenant_name}}\",\n\t\t\t\"rn\": \"tn-{{aci_tenant_name}}\",\n\t\t\t\"status\": \"created\"\n\t\t},\n\t\t\"children\": []\n\t}\n}"
+						},
+						"url": {
+							"raw": "https://{{aci_host}}/api/node/class/fvTenant.json",
+							"protocol": "https",
+							"host": [
+								"{{aci_host}}"
+							],
+							"path": [
+								"api",
+								"node",
+								"class",
+								"fvTenant.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "04. Create Tenant and VRF",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"fvTenant\": {\n\t\t\"attributes\": {\n\t\t\t\"descr\": \"\",\n\t\t\t\"dn\": \"uni/tn-{{aci_tenant_name}}\",\n\t\t\t\"name\": \"{{aci_tenant_name}}\",\n\t\t\t\"nameAlias\": \"\",\n\t\t\t\"ownerKey\": \"\",\n\t\t\t\"ownerTag\": \"\",\n\t\t\t\"status\": \"created\"\n\t\t},\n\t\t\"children\": [\n\t\t\t{\n\t\t\t\t\"fvCtx\": {\n\t\t\t\t\t\"attributes\": {\n\t\t\t\t\t\t\"bdEnforcedEnable\": \"no\",\n\t\t\t\t\t\t\"descr\": \"\",\n\t\t\t\t\t\t\"knwMcastAct\": \"permit\",\n\t\t\t\t\t\t\"name\": \"{{aci_vrf_name}}\",\n\t\t\t\t\t\t\"nameAlias\": \"\",\n\t\t\t\t\t\t\"ownerKey\": \"\",\n\t\t\t\t\t\t\"ownerTag\": \"\",\n\t\t\t\t\t\t\"pcEnfDir\": \"ingress\",\n\t\t\t\t\t\t\"pcEnfPref\": \"enforced\"\n\t\t\t\t\t},\n\t\t\t\t\t\"children\": []\n\t\t\t\t}\n\t\t\t}\n\t\t]\n\t}\n}"
+						},
+						"url": {
+							"raw": "https://{{aci_host}}/api/node/mo/uni/tn-{{aci_tenant_name}}.json",
+							"protocol": "https",
+							"host": [
+								"{{aci_host}}"
+							],
+							"path": [
+								"api",
+								"node",
+								"mo",
+								"uni",
+								"tn-{{aci_tenant_name}}.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "05. Get Tenant",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://{{aci_host}}/api/node/mo/uni/tn-{{aci_tenant_name}}.json?rsp-subtree=children",
+							"protocol": "https",
+							"host": [
+								"{{aci_host}}"
+							],
+							"path": [
+								"api",
+								"node",
+								"mo",
+								"uni",
+								"tn-{{aci_tenant_name}}.json"
+							],
+							"query": [
+								{
+									"key": "rsp-subtree",
+									"value": "children"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "06. Delete a Tenant",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://{{aci_host}}/api/node/mo/uni/tn-{{aci_tenant_name}}.json",
+							"protocol": "https",
+							"host": [
+								"{{aci_host}}"
+							],
+							"path": [
+								"api",
+								"node",
+								"mo",
+								"uni",
+								"tn-{{aci_tenant_name}}.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "07. Create AP, EPG and BD",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<imdata totalCount=\"1\">\n\t<fvTenant annotation=\"\" descr=\"\" dn=\"uni/tn-iot\" name=\"iot\" nameAlias=\"\" ownerKey=\"\" ownerTag=\"\">\n\t\t<fvBD OptimizeWanBandwidth=\"no\" annotation=\"\" arpFlood=\"yes\" descr=\"\" epClear=\"no\" epMoveDetectMode=\"\" hostBasedRouting=\"no\" intersiteBumTrafficAllow=\"no\" intersiteL2Stretch=\"no\" ipLearning=\"yes\" limitIpLearnToSubnets=\"yes\" llAddr=\"::\" mac=\"00:22:BD:F8:19:FF\" mcastAllow=\"no\" multiDstPktAct=\"bd-flood\" name=\"{{aci_bd_name}}\" nameAlias=\"\" ownerKey=\"\" ownerTag=\"\" type=\"regular\" unicastRoute=\"yes\" unkMacUcastAct=\"proxy\" unkMcastAct=\"flood\" vmac=\"not-applicable\">\n\t\t\t<fvSubnet annotation=\"\" ctrl=\"\" descr=\"\" ip=\"{{aci_bd_ip}}\" name=\"\" nameAlias=\"\" preferred=\"no\" scope=\"public\" virtual=\"no\"/>\n\t\t\t<fvRsIgmpsn annotation=\"\" tnIgmpSnoopPolName=\"\"/>\n\t\t\t<fvRsCtx annotation=\"\" tnFvCtxName=\"iot-vrf\"/>\n\t\t\t<fvRsBdToEpRet annotation=\"\" resolveAct=\"resolve\" tnFvEpRetPolName=\"\"/>\n\t\t\t<fvRsBDToOut annotation=\"\" tnL3extOutName=\"iot-L3out\"/>\n\t\t\t<fvRsBDToNdP annotation=\"\" tnNdIfPolName=\"\"/>\n\t\t</fvBD>\n\t\t<fvAp annotation=\"\" descr=\"\" name=\"{{aci_ap_name}}\" nameAlias=\"\" ownerKey=\"\" ownerTag=\"\" prio=\"unspecified\">\n\t\t\t<fvAEPg annotation=\"\" descr=\"\" exceptionTag=\"\" floodOnEncap=\"disabled\" fwdCtrl=\"\" hasMcastSource=\"no\" isAttrBasedEPg=\"no\" matchT=\"AtleastOne\" name=\"{{aci_app_epg}}\" nameAlias=\"\" pcEnfPref=\"unenforced\" prefGrMemb=\"exclude\" prio=\"unspecified\" shutdown=\"no\">\n\t\t\t\t<fvRsDomAtt annotation=\"\" bindingType=\"none\" classPref=\"encap\" delimiter=\"\" encap=\"unknown\" encapMode=\"auto\" epgCos=\"Cos0\" epgCosPref=\"disabled\" instrImedcy=\"immediate\" lagPolicyName=\"\" netflowDir=\"both\" netflowPref=\"disabled\" numPorts=\"0\" portAllocation=\"none\" primaryEncap=\"unknown\" primaryEncapInner=\"unknown\" resImedcy=\"immediate\" secondaryEncapInner=\"unknown\" switchingMode=\"native\" tDn=\"uni/vmmp-VMware/dom-candid_vcenter\"/>\n\t\t\t\t<fvRsCustQosPol annotation=\"\" tnQosCustomPolName=\"\"/>\n\t\t\t\t<fvRsBd annotation=\"\" tnFvBDName=\"{{aci_bd_name}}\"/>\n\t\t\t</fvAEPg>\n\t\t</fvAp>\n\t</fvTenant>\n</imdata>"
+						},
+						"url": {
+							"raw": "https://{{aci_host}}/api/mo/uni.xml",
+							"protocol": "https",
+							"host": [
+								"{{aci_host}}"
+							],
+							"path": [
+								"api",
+								"mo",
+								"uni.xml"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "08. Create Contract",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<imdata totalCount=\"1\">\n\t<fvTenant annotation=\"\" descr=\"\" dn=\"uni/tn-iot\" name=\"iot\" nameAlias=\"\" ownerKey=\"\" ownerTag=\"\">\n\t\t<vzBrCP annotation=\"\" descr=\"\" name=\"{{aci_contract_name}}\" nameAlias=\"\" ownerKey=\"\" ownerTag=\"\" prio=\"unspecified\" scope=\"context\" targetDscp=\"unspecified\">\n\t\t\t<vzSubj annotation=\"\" consMatchT=\"AtleastOne\" descr=\"\" name=\"HTTP_ICMP\" nameAlias=\"\" prio=\"unspecified\" provMatchT=\"AtleastOne\" revFltPorts=\"yes\" targetDscp=\"unspecified\">\n\t\t\t\t<vzRsSubjFiltAtt action=\"permit\" annotation=\"\" directives=\"\" priorityOverride=\"default\" tnVzFilterName=\"HTTP\"/>\n\t\t\t\t<vzRsSubjFiltAtt action=\"permit\" annotation=\"\" directives=\"\" priorityOverride=\"default\" tnVzFilterName=\"icmp\"/>\n\t\t\t</vzSubj>\n\t\t</vzBrCP>\n\t</fvTenant>\n</imdata>"
+						},
+						"url": {
+							"raw": "https://{{aci_host}}/api/mo/uni.xml",
+							"protocol": "https",
+							"host": [
+								"{{aci_host}}"
+							],
+							"path": [
+								"api",
+								"mo",
+								"uni.xml"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "09. Permit (assign contract to EPGs)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<imdata totalCount=\"1\">\n\t<fvTenant annotation=\"\" descr=\"\" dn=\"uni/tn-iot\" name=\"iot\" nameAlias=\"\" ownerKey=\"\" ownerTag=\"\">\n\t\t<l3extOut annotation=\"\" descr=\"\" enforceRtctrl=\"export\" name=\"iot-L3out\" nameAlias=\"\" ownerKey=\"\" ownerTag=\"\" targetDscp=\"unspecified\">\n\t\t\t<l3extInstP annotation=\"\" descr=\"\" exceptionTag=\"\" floodOnEncap=\"disabled\" matchT=\"AtleastOne\" name=\"Bulbs_SGT\" nameAlias=\"\" prefGrMemb=\"exclude\" prio=\"unspecified\" targetDscp=\"unspecified\">\n\t\t\t\t<fvRsCustQosPol annotation=\"\" tnQosCustomPolName=\"\"/>\n\t\t\t\t<fvRsCons annotation=\"\" prio=\"unspecified\" tnVzBrCPName=\"{{aci_contract_name}}\"/>\n\t\t\t</l3extInstP>\n\t\t</l3extOut>\n\t\t<fvAp annotation=\"\" descr=\"\" name=\"{{aci_ap_name}}\" nameAlias=\"\" ownerKey=\"\" ownerTag=\"\" prio=\"unspecified\">\n\t\t\t<fvAEPg annotation=\"\" descr=\"\" exceptionTag=\"\" floodOnEncap=\"disabled\" fwdCtrl=\"\" hasMcastSource=\"no\" isAttrBasedEPg=\"no\" matchT=\"AtleastOne\" name=\"{{aci_app_epg}}\" nameAlias=\"\" pcEnfPref=\"unenforced\" prefGrMemb=\"exclude\" prio=\"unspecified\" shutdown=\"no\">\n\t\t\t\t<fvRsProv annotation=\"\" matchT=\"AtleastOne\" prio=\"unspecified\" tnVzBrCPName=\"{{aci_contract_name}}\"/>\n\t\t\t</fvAEPg>\n\t\t</fvAp>\n\t</fvTenant>\n</imdata>"
+						},
+						"url": {
+							"raw": "https://{{aci_host}}/api/mo/uni.xml",
+							"protocol": "https",
+							"host": [
+								"{{aci_host}}"
+							],
+							"path": [
+								"api",
+								"mo",
+								"uni.xml"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "10. Deny (remove contract from EPGs)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<imdata totalCount=\"1\">\n\t<fvTenant annotation=\"\" descr=\"\" dn=\"uni/tn-iot\" name=\"iot\" nameAlias=\"\" ownerKey=\"\" ownerTag=\"\">\n\t\t<l3extOut annotation=\"\" descr=\"\" enforceRtctrl=\"export\" name=\"iot-L3out\" nameAlias=\"\" ownerKey=\"\" ownerTag=\"\" targetDscp=\"unspecified\">\n\t\t\t<l3extInstP annotation=\"\" descr=\"\" exceptionTag=\"\" floodOnEncap=\"disabled\" matchT=\"AtleastOne\" name=\"Bulbs_SGT\" nameAlias=\"\" prefGrMemb=\"exclude\" prio=\"unspecified\" targetDscp=\"unspecified\">\n\t\t\t\t<fvRsCustQosPol annotation=\"\" tnQosCustomPolName=\"\"/>\n\t\t\t\t<fvRsCons annotation=\"\" prio=\"unspecified\" tnVzBrCPName=\"{{aci_contract_name}}\" status=\"deleted\"/>\n\t\t\t</l3extInstP>\n\t\t</l3extOut>\n\t\t<fvAp annotation=\"\" descr=\"\" name=\"{{aci_ap_name}}\" nameAlias=\"\" ownerKey=\"\" ownerTag=\"\" prio=\"unspecified\">\n\t\t\t<fvAEPg annotation=\"\" descr=\"\" exceptionTag=\"\" floodOnEncap=\"disabled\" fwdCtrl=\"\" hasMcastSource=\"no\" isAttrBasedEPg=\"no\" matchT=\"AtleastOne\" name=\"{{aci_app_epg}}\" nameAlias=\"\" pcEnfPref=\"unenforced\" prefGrMemb=\"exclude\" prio=\"unspecified\" shutdown=\"no\">\n\t\t\t\t<fvRsProv annotation=\"\" matchT=\"AtleastOne\" prio=\"unspecified\" tnVzBrCPName=\"{{aci_contract_name}}\" status=\"deleted\"/>\n\t\t\t</fvAEPg>\n\t\t</fvAp>\n\t</fvTenant>\n</imdata>"
+						},
+						"url": {
+							"raw": "https://{{aci_host}}/api/mo/uni.xml",
+							"protocol": "https",
+							"host": [
+								"{{aci_host}}"
+							],
+							"path": [
+								"api",
+								"mo",
+								"uni.xml"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "11. Delete AP, EPG, BD and Contract",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<imdata totalCount=\"1\">\n\t<fvTenant annotation=\"\" descr=\"\" dn=\"uni/tn-iot\" name=\"iot\" nameAlias=\"\" ownerKey=\"\" ownerTag=\"\">\n\t\t<fvBD OptimizeWanBandwidth=\"no\" annotation=\"\" arpFlood=\"yes\" descr=\"\" epClear=\"no\" epMoveDetectMode=\"\" hostBasedRouting=\"no\" intersiteBumTrafficAllow=\"no\" intersiteL2Stretch=\"no\" ipLearning=\"yes\" limitIpLearnToSubnets=\"yes\" llAddr=\"::\" mac=\"00:22:BD:F8:19:FF\" mcastAllow=\"no\" multiDstPktAct=\"bd-flood\" name=\"{{aci_bd_name}}\" nameAlias=\"\" ownerKey=\"\" ownerTag=\"\" type=\"regular\" unicastRoute=\"yes\" unkMacUcastAct=\"proxy\" unkMcastAct=\"flood\" vmac=\"not-applicable\"  status=\"deleted\">\n\t\t</fvBD>\n\t\t<fvAp annotation=\"\" descr=\"\" name=\"{{aci_ap_name}}\" nameAlias=\"\" ownerKey=\"\" ownerTag=\"\" prio=\"unspecified\" status=\"deleted\">\n\t\t</fvAp>\n\t\t<vzBrCP annotation=\"\" descr=\"\" name=\"{{aci_contract_name}}\" nameAlias=\"\" ownerKey=\"\" ownerTag=\"\" prio=\"unspecified\" scope=\"context\" targetDscp=\"unspecified\" status=\"deleted\">\n\t\t</vzBrCP>\n\t</fvTenant>\n</imdata>"
+						},
+						"url": {
+							"raw": "https://{{aci_host}}/api/mo/uni.xml",
+							"protocol": "https",
+							"host": [
+								"{{aci_host}}"
+							],
+							"path": [
+								"api",
+								"mo",
+								"uni.xml"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DNAC",
+			"item": [
+				{
+					"name": "01. Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "724ada70-df85-456e-b3e2-90f2bd0cc054",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"dnac_token\", data.Token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{dnac_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{dnac_username}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"value": true,
+									"type": "boolean"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "content-type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic YWRtaW46R3JhcGV2aW5lMQ=="
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{dnac_host}}:{{dnac_port}}/api/system/v1/auth/token",
+							"protocol": "https",
+							"host": [
+								"{{dnac_host}}"
+							],
+							"port": "{{dnac_port}}",
+							"path": [
+								"api",
+								"system",
+								"v1",
+								"auth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "02. Get Overall Network Health",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a485e701-ca8b-422b-8188-a912c33b06c8",
+								"exec": [
+									"var date = new Date();",
+									"var timestamp = date.getTime();",
+									"postman.setEnvironmentVariable(\"dnac_timestamp\", timestamp);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{dnac_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{dnac_host}}:{{dnac_port}}/dna/intent/api/v1/network-health?timestamp={{dnac_timestamp}}",
+							"protocol": "https",
+							"host": [
+								"{{dnac_host}}"
+							],
+							"port": "{{dnac_port}}",
+							"path": [
+								"dna",
+								"intent",
+								"api",
+								"v1",
+								"network-health"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{dnac_timestamp}}"
+								}
+							]
+						},
+						"description": "Returns Overall Network Health information by Device category (Access, Distribution, Core, Router, Wireless) for any given point of time"
+					},
+					"response": []
+				},
+				{
+					"name": "03. Get Overall Client Health",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a485e701-ca8b-422b-8188-a912c33b06c8",
+								"exec": [
+									"var date = new Date();",
+									"var timestamp = date.getTime();",
+									"postman.setEnvironmentVariable(\"dnac_timestamp\", timestamp);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"type": "text",
+								"value": "{{dnac_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://{{dnac_host}}:{{dnac_port}}/dna/intent/api/v1/client-health?timestamp={{dnac_timestamp}}",
+							"protocol": "https",
+							"host": [
+								"{{dnac_host}}"
+							],
+							"port": "{{dnac_port}}",
+							"path": [
+								"dna",
+								"intent",
+								"api",
+								"v1",
+								"client-health"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{dnac_timestamp}}"
+								}
+							]
+						},
+						"description": "Returns Overall Client Health information by Client type (Wired and Wireless) for any given point of time"
+					},
+					"response": []
+				},
+				{
+					"name": "04. List  Virtual Networks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "43191582-f304-4a4d-a6d8-4c682e9143bc",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{dnac_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://{{dnac_host}}:{{dnac_port}}/api/v2/data/customer-facing-service/virtualnetworkcontext?limit=100&offset=1&sortBy=name&order=asc",
+							"protocol": "https",
+							"host": [
+								"{{dnac_host}}"
+							],
+							"port": "{{dnac_port}}",
+							"path": [
+								"api",
+								"v2",
+								"data",
+								"customer-facing-service",
+								"virtualnetworkcontext"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "100"
+								},
+								{
+									"key": "offset",
+									"value": "1"
+								},
+								{
+									"key": "sortBy",
+									"value": "name"
+								},
+								{
+									"key": "order",
+									"value": "asc"
+								}
+							]
+						},
+						"description": "Example of the /host API"
+					},
+					"response": []
+				},
+				{
+					"name": "05. Create Virtual Network",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "43191582-f304-4a4d-a6d8-4c682e9143bc",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"dnac_taskid\", data.response.taskId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{dnac_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n\t{\n\t\t\"name\": \"{{dnac_vn_name}}\",\n\t\t\"virtualNetworkContextType\": \"ISOLATED\"\n\t}\n]"
+						},
+						"url": {
+							"raw": "https://{{dnac_host}}:{{dnac_port}}/api/v2/data/customer-facing-service/virtualnetworkcontext",
+							"protocol": "https",
+							"host": [
+								"{{dnac_host}}"
+							],
+							"port": "{{dnac_port}}",
+							"path": [
+								"api",
+								"v2",
+								"data",
+								"customer-facing-service",
+								"virtualnetworkcontext"
+							]
+						},
+						"description": "Example of the /host API"
+					},
+					"response": []
+				},
+				{
+					"name": "06. Get a Virtual Network by Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "43191582-f304-4a4d-a6d8-4c682e9143bc",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"dnac_vnid\", data.response[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{dnac_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://{{dnac_host}}:{{dnac_port}}/api/v2/data/customer-facing-service/virtualnetworkcontext?name={{dnac_vn_name}}",
+							"protocol": "https",
+							"host": [
+								"{{dnac_host}}"
+							],
+							"port": "{{dnac_port}}",
+							"path": [
+								"api",
+								"v2",
+								"data",
+								"customer-facing-service",
+								"virtualnetworkcontext"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{dnac_vn_name}}"
+								}
+							]
+						},
+						"description": "Example of the /host API"
+					},
+					"response": []
+				},
+				{
+					"name": "07. Delete Virtual Network",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "43191582-f304-4a4d-a6d8-4c682e9143bc",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"dnac_taskid\", data.response.taskId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{dnac_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://{{dnac_host}}:{{dnac_port}}/api/v2/data/customer-facing-service/virtualnetworkcontext/{{dnac_vnid}}",
+							"protocol": "https",
+							"host": [
+								"{{dnac_host}}"
+							],
+							"port": "{{dnac_port}}",
+							"path": [
+								"api",
+								"v2",
+								"data",
+								"customer-facing-service",
+								"virtualnetworkcontext",
+								"{{dnac_vnid}}"
+							]
+						},
+						"description": "Example of the /host API"
+					},
+					"response": []
+				},
+				{
+					"name": "Check Task status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "432f987a-0a21-49e6-baac-e5a9bec79f8a",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{dnac_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{dnac_host}}:{{dnac_port}}/dna/intent/api/v1/task/{{dnac_taskid}}",
+							"protocol": "https",
+							"host": [
+								"{{dnac_host}}"
+							],
+							"port": "{{dnac_port}}",
+							"path": [
+								"dna",
+								"intent",
+								"api",
+								"v1",
+								"task",
+								"{{dnac_taskid}}"
+							]
+						},
+						"description": "Example of the /host API"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "1a68f20e-8d22-45e7-b823-d8e66b5bd60f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "7e58b855-c2e2-47f6-950d-da360a5e2396",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

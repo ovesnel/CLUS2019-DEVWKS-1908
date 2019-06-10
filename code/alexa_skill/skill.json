@@ -1,0 +1,264 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "robot",
+            "intents": [
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "CreateSegmentIntent",
+                    "slots": [
+                        {
+                            "name": "segment",
+                            "type": "SEGMENT_NAME",
+                            "samples": [
+                                "{segment}",
+                                "The name of the segment is {segment}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "Create a new segment called {segment}",
+                        "Create a segment",
+                        "Create a new segment"
+                    ]
+                },
+                {
+                    "name": "GetNetworkHealthIntent",
+                    "slots": [],
+                    "samples": [
+                        "What is the current status of my network",
+                        "What's the current status of my network",
+                        "How is the health of the network today",
+                        "What is the status of the network",
+                        "What is the current status of the network"
+                    ]
+                },
+                {
+                    "name": "DeleteSegmentIntent",
+                    "slots": [
+                        {
+                            "name": "segment",
+                            "type": "SEGMENT_NAME"
+                        }
+                    ],
+                    "samples": [
+                        "Delete the segment called {segment}",
+                        "Delete segment called {segment}",
+                        "Delete segment {segment}"
+                    ]
+                },
+                {
+                    "name": "AllowToTalkIntent",
+                    "slots": [],
+                    "samples": [
+                        "Allow light bulbs talk to smart controllers",
+                        "Allow light bulbs to talk to smart controllers servers",
+                        "Allow light bulbs to talk to smart controllers"
+                    ]
+                },
+                {
+                    "name": "DenyToTalkIntent",
+                    "slots": [],
+                    "samples": [
+                        "Reset communications between light bulbs and smart controllers",
+                        "Reset communications for light bulbs and smart controllers",
+                        "Reset communications for smart controllers and light bulbs"
+                    ]
+                },
+                {
+                    "name": "GetServerLocationIntent",
+                    "slots": [
+                        {
+                            "name": "server_name",
+                            "type": "SERVER_NAME",
+                            "samples": [
+                                "{server_name}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "Where is the {server_name}",
+                        "Where is my {server_name}",
+                        "Where is my server {server_name}"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "SEGMENT_NAME",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "untrusted1"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "abc123"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "abc"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "production"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "trusted"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "untrusted"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "SERVER_NAME",
+                    "values": [
+                        {
+                            "id": "SmartCtrl_Server2",
+                            "name": {
+                                "value": "Smart Controller Server 2"
+                            }
+                        },
+                        {
+                            "id": "SmartCtrl_Server1",
+                            "name": {
+                                "value": "Smart Controller Server 1"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "CreateSegmentIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "segment",
+                            "type": "SEGMENT_NAME",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.586363956193.401528665486"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "DeleteSegmentIntent",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.1547715944180"
+                    },
+                    "slots": [
+                        {
+                            "name": "segment",
+                            "type": "SEGMENT_NAME",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                },
+                {
+                    "name": "DenyToTalkIntent",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.150894229819"
+                    },
+                    "slots": []
+                },
+                {
+                    "name": "GetServerLocationIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "server_name",
+                            "type": "SERVER_NAME",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.255127780261.993640867234"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "ALWAYS"
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.586363956193.401528665486",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Please say the name of the new segment"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.1547715944180",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Are you sure you want to delete the segment called {segment} ?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.150894229819",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Are you sure that you want to block this communication?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Are you sure that you don't want light bulbs talk to smart controllers?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.255127780261.993640867234",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Please say the name of the server"
+                    }
+                ]
+            }
+        ]
+    }
+}
